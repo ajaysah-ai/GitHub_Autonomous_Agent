@@ -1,5 +1,5 @@
 const BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || 'https://huggingface.co/spaces/ajaysah-ai/github-automation-api/';
+    import.meta.env.VITE_API_BASE_URL || 'https://ajaysah-ai-github-automation-api.hf.space';
 
 class ApiError extends Error {
     constructor(message, status) {
