@@ -4,6 +4,9 @@ A React + Vite client for the GitHub Automation Agent backend — sign up (or tr
 describe a goal in plain language, answer clarifications if asked, review and approve the
 full plan once, and track everything in history.
 
+# Licenced
+"Licensed under PolyForm Shield 1.0.0".
+
 ---
 
 ## Table of contents
