@@ -1,0 +1,237 @@
+{
+    "tools": [{
+            "name": "write_readme",
+            "title": "Write README",
+            "description": "Generates a README.md file for a single file or an entire project folder by analyzing the source code and writing human-friendly documentation.",
+            "parameters": {
+                "folder_name": "str - name of the local workspace folder or file to document",
+                "extension": "List[str] - file extensions to include while scanning, e.g. ['.py', '.js']"
+            },
+            "keywords": [
+                "readme",
+                "documentation",
+                "docs",
+                "document project",
+                "write documentation",
+                "generate readme",
+                "explain project",
+                "project overview",
+                "readme.md"
+            ],
+            "example_goals": [
+                "write a readme for my_project folder",
+                "generate documentation for this repo",
+                "create a README.md for the backend folder",
+                "document my python files",
+                "create readme.md"
+            ],
+            "requires_github_token": false,
+            "category": "documentation",
+            "required_params": [
+                "folder_name",
+                "extension"
+            ],
+            "path_params": [
+                "folder_name"
+            ]
+        },
+        {
+            "name": "write_requirements",
+            "title": "Write Requirements",
+            "description": "Scans a file or folder, detects the imported/used libraries, and generates a requirements.txt (or equivalent dependency file) for the project.",
+            "parameters": {
+                "folder_name": "str - name of the local workspace folder or file to scan",
+                "extension": "List[str] - file extensions to scan, e.g. ['.py']"
+            },
+            "keywords": [
+                "requirements",
+                "requirements.txt",
+                "dependencies",
+                "packages",
+                "pip freeze",
+                "list dependencies",
+                "generate requirements",
+                "requirements.txt"
+            ],
+            "example_goals": [
+                "create requirements.txt for my_project",
+                "list all dependencies used in this folder",
+                "generate a requirements file for these python scripts"
+            ],
+            "requires_github_token": false,
+            "category": "documentation",
+            "required_params": [
+                "folder_name",
+                "extension"
+            ],
+            "path_params": [
+                "folder_name"
+            ]
+        },
+        {
+            "name": "push_folder",
+            "title": "Push Folder to GitHub",
+            "description": "Pushes a local workspace folder to a GitHub repository, creating an initial commit with the given message.",
+            "parameters": {
+                "workspace_folder_name": "str - local folder inside workspace to push",
+                "repo_name": "str - target GitHub repository name",
+                "commit": "str = 'initial commit via Agent' - commit message"
+            },
+            "keywords": [
+                "push",
+                "upload code",
+                "commit",
+                "push folder",
+                "push to github",
+                "upload to repo",
+                "publish code"
+            ],
+            "example_goals": [
+                "push my_project folder to github repo test-repo",
+                "upload this folder to my github",
+                "commit and push the workspace folder to repo 'demo'"
+            ],
+            "requires_github_token": true,
+            "category": "github_write",
+            "required_params": [
+                "workspace_folder_name",
+                "repo_name"
+            ],
+            "path_params": [
+                "workspace_folder_name"
+            ]
+        },
+        {
+            "name": "pull_repo",
+            "title": "Pull Repository",
+            "description": "Clones/pulls a GitHub repository (specific branch) into a local folder path inside the workspace.",
+            "parameters": {
+                "repo_url": "str - full GitHub repository URL",
+                "local_folder_path": "str - destination folder inside workspace",
+                "branch": "str = 'main' - branch to pull"
+            },
+            "keywords": [
+                "pull",
+                "clone",
+                "download repo",
+                "fetch repo",
+                "get repository",
+                "clone github repo"
+            ],
+            "example_goals": [
+                "pull https://github.com/user/repo into local folder repo1",
+                "clone this repository to my workspace",
+                "download the dev branch of a repo"
+            ],
+            "requires_github_token": true,
+            "category": "github_read",
+            "required_params": [
+                "repo_url",
+                "local_folder_path"
+            ],
+            "path_params": [
+                "local_folder_path"
+            ]
+        },
+        {
+            "name": "delete_repo",
+            "title": "Delete Repository",
+            "description": "Permanently deletes a GitHub repository owned by the authenticated user.",
+            "parameters": {
+                "repo_name": "str - name of the repository to delete"
+            },
+            "keywords": [
+                "delete",
+                "remove repo",
+                "delete repository",
+                "erase repo"
+            ],
+            "example_goals": [
+                "delete repo test9",
+                "remove my old-project repository from github"
+            ],
+            "requires_github_token": true,
+            "category": "github_write",
+            "required_params": [
+                "repo_name"
+            ],
+            "path_params": []
+        },
+        {
+            "name": "create_repo",
+            "title": "Create Repository",
+            "description": "Creates a new GitHub repository, optionally private, with a description.",
+            "parameters": {
+                "repo_name": "str - name of the new repository",
+                "private": "bool = False - whether the repo should be private",
+                "description": "str = 'Handled via GitHub Automation Agent' - repository description"
+            },
+            "keywords": [
+                "create repo",
+                "new repository",
+                "make repo",
+                "initialize repository"
+            ],
+            "example_goals": [
+                "create repo 'test9'",
+                "create a private repository named secrets-vault",
+                "make a new github repo for my project"
+            ],
+            "requires_github_token": true,
+            "category": "github_write",
+            "required_params": [
+                "repo_name"
+            ],
+            "path_params": []
+        },
+        {
+            "name": "list_repos",
+            "title": "List Repositories",
+            "description": "Lists all GitHub repositories belonging to the authenticated user.",
+            "parameters": {},
+            "keywords": [
+                "list repos",
+                "show repositories",
+                "all repos",
+                "my repositories",
+                "which repos do i have"
+            ],
+            "example_goals": [
+                "list all my github repos",
+                "show me my repositories",
+                "what repos do i have on github"
+            ],
+            "requires_github_token": true,
+            "category": "github_read",
+            "required_params": [],
+            "path_params": []
+        },
+        {
+            "name": "list_repo_files",
+            "title": "List Repository Files",
+            "description": "Lists all files inside a specific GitHub repository, optionally scoped to a sub-folder.",
+            "parameters": {
+                "repo_name": "str - repository to list files from",
+                "sub_folder_name": "str = '' - optional sub folder path inside the repo"
+            },
+            "keywords": [
+                "list files",
+                "repo contents",
+                "show files in repo",
+                "browse repository",
+                "explore repo"
+            ],
+            "example_goals": [
+                "list all files in repo test9",
+                "show me the files inside the src folder of my-repo",
+                "what files are in this repository"
+            ],
+            "requires_github_token": true,
+            "category": "github_read",
+            "required_params": [
+                "repo_name"
+            ],
+            "path_params": []
+        }
+    ]
+}

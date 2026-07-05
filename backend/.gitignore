@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+databases/*.db
+databases/-.db-*
+logs/*.jsonl
+workspace/
+.venv/

@@ -1,0 +1,128 @@
+{
+    "tools": [{
+        "name": "create_local_folder",
+        "title": "Create Local Folder",
+        "description": "Creates a new folder inside the local workspace. Useful before copying files or generating projects.",
+        "parameters": {
+            "folder_name": "str - name of the new workspace folder"
+        },
+        "keywords": [
+            "create folder",
+            "new folder",
+            "workspace folder",
+            "make folder",
+            "local folder"
+        ],
+        "example_goals": [
+            "create workspace folder demo",
+            "make a folder named backend",
+            "create local folder project1"
+        ],
+        "requires_github_token": false,
+        "category": "workspace_write"
+    }, {
+        "name": "copy_folder",
+        "title": "Copy Folder",
+        "description": "Copies an existing local folder into the workspace while preserving its complete structure.",
+        "parameters": {
+            "source_folder_path": "str - absolute/local source folder path",
+            "destination_folder_name": "str - destination folder name inside workspace"
+        },
+        "keywords": [
+            "copy folder",
+            "import folder",
+            "duplicate folder",
+            "workspace copy"
+        ],
+        "example_goals": [
+            "copy D:/Projects/Test into workspace",
+            "import my project folder",
+            "copy backend folder to workspace"
+        ],
+        "requires_github_token": false,
+        "category": "workspace_write"
+    }, {
+        "name": "copy_file",
+        "title": "Copy File",
+        "description": "Copies a single file into a folder inside the local workspace.",
+        "parameters": {
+            "source_file_path": "str - absolute/local file path",
+            "destination_folder_name": "str - workspace folder name"
+        },
+        "keywords": [
+            "copy file",
+            "import file",
+            "move file",
+            "workspace file"
+        ],
+        "example_goals": [
+            "copy main.py into backend",
+            "import config.json",
+            "copy README.md to project folder"
+        ],
+        "requires_github_token": false,
+        "category": "workspace_write"
+    }, {
+        "name": "list_folders",
+        "title": "List Workspace Folders",
+        "description": "Lists all folders currently available inside the local workspace.",
+        "parameters": {},
+        "keywords": [
+            "list folders",
+            "workspace folders",
+            "show folders",
+            "available folders"
+        ],
+        "example_goals": [
+            "show workspace folders",
+            "list all folders",
+            "what folders exist"
+        ],
+        "requires_github_token": false,
+        "category": "workspace_read"
+    }, {
+        "name": "list_folder_contents",
+        "title": "List Folder Contents",
+        "description": "Recursively lists all files inside a workspace folder. Optionally filters by one or more file extensions. This tool should normally be used before reading files so the agent knows the exact filenames.",
+        "parameters": {
+            "folder_name": "str - workspace folder name",
+            "extensions": "List[str] | str = optional file extension filter (e.g. ['.py','.md'])"
+        },
+        "keywords": [
+            "list files",
+            "folder contents",
+            "workspace files",
+            "scan folder",
+            "show project files"
+        ],
+        "example_goals": [
+            "list files inside backend",
+            "show all python files",
+            "scan project folder"
+        ],
+        "requires_github_token": false,
+        "category": "workspace_read"
+    }, {
+        "name": "read_file",
+        "title": "Read File",
+        "description": "Reads the contents of a file from the workspace or an absolute local path. Normally the agent should first call 'list_folder_contents' to discover the exact filename before reading.",
+        "parameters": {
+            "file_path": "str - workspace-relative or absolute file path"
+        },
+        "keywords": [
+            "read file",
+            "open file",
+            "show file",
+            "view code",
+            "display file"
+        ],
+        "example_goals": [
+            "read main.py",
+            "open README.md",
+            "show config.json",
+            "display app.py"
+        ],
+        "requires_github_token": false,
+        "category": "workspace_read"
+    }]
+}
