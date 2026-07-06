@@ -14,7 +14,7 @@ export default function ChatPage() {
   const { threadId: routeThreadId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { token, isDemo, guestId } = useAuth();
+  const { token } = useAuth();
   const { showToast } = useToast();
 
   const [threadId, setThreadId] = useState(routeThreadId !== 'new' ? routeThreadId : null);
@@ -36,7 +36,7 @@ export default function ChatPage() {
     setPlan(result.plan || null);
   }, []);
 
-  // Fresh "seed" passed via navigation state (from DemoPage or right after starting).
+  // Fresh "seed" passed via navigation state (right after starting a goal).
   useEffect(() => {
     if (location.state?.seed) {
       applyResult(location.state.seed.thread_id, location.state.seed);
@@ -64,10 +64,10 @@ export default function ChatPage() {
     setError('');
     setBusy(true);
     try {
-      const result = isDemo || !token ? await api.demoStart(goalDraft) : await api.startGoal(token, goalDraft);
+      const result = await api.startGoal(token, goalDraft);
       navigate(`/chat/${result.thread_id}`, { state: { seed: result } });
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Need approval! Please check history.');
+      setError(err instanceof ApiError ? err.message : 'Could not start this goal.');
     } finally {
       setBusy(false);
     }
@@ -77,9 +77,7 @@ export default function ChatPage() {
     setError('');
     setBusy(true);
     try {
-      const result = isDemo
-        ? await api.demoResume(guestId, threadId, value)
-        : await api.resumeGoal(token, threadId, value);
+      const result = await api.resumeGoal(token, threadId, value);
       applyResult(threadId, result);
       setReplyDraft('');
     } catch (err) {
@@ -94,7 +92,7 @@ export default function ChatPage() {
       <div>
         <div className="page-header">
           <h1 className="page-title">New goal</h1>
-          <p className="page-subtitle">Describe what you want done — the agent plans, reviews itself, then asks for one approval before running anything. I recommend you to please read 'About' before execute.</p>
+          <p className="page-subtitle">Describe what you want done — the agent plans, reviews itself, then asks for one approval before running anything.</p>
         </div>
         {error && <div className="error-banner">{error}</div>}
         <form onSubmit={handleStart} className="card">

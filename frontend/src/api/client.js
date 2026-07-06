@@ -42,11 +42,6 @@ export const api = {
     resumeGoal: (token, thread_id, user_input) =>
         request('/goal/resume', { method: 'POST', body: { thread_id, user_input }, token }),
 
-    // ---- demo (no auth) ----
-    demoStart: (goal) => request('/demo/start', { method: 'POST', body: { goal } }),
-    demoResume: (guest_id, thread_id, user_input) =>
-        request('/demo/resume', { method: 'POST', body: { guest_id, thread_id, user_input } }),
-
     // ---- history ----
     getHistory: (token) => request('/history', { token }),
     getThread: (token, threadId) => request(`/history/${threadId}`, { token }),
@@ -59,23 +54,10 @@ export const api = {
         form.append('file', file);
         return request('/files/upload', { method: 'POST', body: form, token, isForm: true });
     },
-    downloadFileUrl: (projectName) => `${BASE_URL}/files/download/${encodeURIComponent(projectName)}`,
     deleteFile: (token, projectName) => request(`/files/${encodeURIComponent(projectName)}`, { method: 'DELETE', token }),
 
-    // ---- demo files ----
-    demoListFiles: (guestId) => request(`/demo/files/list/${guestId}`),
-    demoUploadFile: (guestId, projectName, file) => {
-        const form = new FormData();
-        form.append('guest_id', guestId);
-        form.append('project_name', projectName);
-        form.append('file', file);
-        return request('/demo/files/upload', { method: 'POST', body: form, isForm: true });
-    },
-    demoDownloadFileUrl: (guestId, projectName) => `${BASE_URL}/demo/files/download/${guestId}/${encodeURIComponent(projectName)}`,
-
     // ---- feedback ----
-    submitFeedback: (token, guestId, payload) =>
-        request('/feedback', { method: 'POST', body: {...payload, guest_id: guestId || undefined }, token }),
+    submitFeedback: (token, payload) => request('/feedback', { method: 'POST', body: payload, token }),
     allFeedbacks: () => request('/all_feedbacks'),
 };
 

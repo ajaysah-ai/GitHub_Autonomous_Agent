@@ -4,19 +4,18 @@ import { useState } from 'react';
 import { useAuth } from '../context/Authcontext.jsx';
 
 export default function Layout({ children }) {
-  const { username, isDemo, logout, clearDemoSession } = useAuth();
+  const { username, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   function handleExit() {
-    if (isDemo) clearDemoSession();
-    else logout();
+    logout();
     navigate('/login');
   }
 
   const links = [
     { to: '/chat/new', icon: MessageSquarePlus, label: 'New goal' },
-    ...(!isDemo ? [{ to: '/history', icon: History, label: 'History' }] : []),
+    { to: '/history', icon: History, label: 'History' },
     { to: '/files', icon: FolderGit2, label: 'Files' },
     { to: '/feedbacks', icon: MessagesSquare, label: 'Feedback' },
     { to: '/about', icon: Info, label: 'About' },
@@ -41,11 +40,9 @@ export default function Layout({ children }) {
           </NavLink>
         ))}
         <div className="nav-footer">
-          <div style={{ marginBottom: 8 }}>
-            {isDemo ? 'Demo session' : username}
-          </div>
+          <div style={{ marginBottom: 8 }}>{username}</div>
           <button className="nav-link" onClick={handleExit}>
-            <LogOut size={15} /> {isDemo ? 'End demo' : 'Log out'}
+            <LogOut size={15} /> Log out
           </button>
         </div>
       </nav>

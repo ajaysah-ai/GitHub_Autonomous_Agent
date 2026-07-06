@@ -25,7 +25,7 @@ const TOOLS = [
 ];
 
 const STEPS = [
-  { title: 'Sign up (or try the demo)', body: 'Signup takes your GitHub token and Groq API key once — they\'re never asked for again mid-task. The demo needs no account, but only supports README/requirements generation.' },
+  { title: 'Sign up', body: 'Signup takes your GitHub token and Groq API key once — they\'re never asked for again mid-task.' },
   { title: 'Describe your goal', body: 'Plain language: "create repo my-project" or "write a readme for my_project folder". The agent plans the exact steps.' },
   { title: 'Answer clarifications, if any', body: 'If a required detail is missing (like a repo name), the agent asks — up to 3 times — instead of guessing.' },
   { title: 'Review and approve the plan, once', body: 'Every proposed action + its parameters is shown together, git-diff style. One "yes" runs everything; anything else cancels the whole task.' },

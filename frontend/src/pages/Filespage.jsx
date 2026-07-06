@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { UploadCloud, Download, Trash2, FolderGit2 } from 'lucide-react';
 import { useAuth } from '../context/Authcontext.jsx';
 import { useToast } from '../context/Toastcontext.jsx';
-import { api, ApiError } from '../api/client.js';
+import { api, ApiError, BASE_URL } from '../api/client.js';
 
 export default function FilesPage() {
-  const { token, isDemo, guestId } = useAuth();
+  const { token } = useAuth();
   const { showToast } = useToast();
   const [projects, setProjects] = useState(null);
   const [projectName, setProjectName] = useState('');
@@ -16,7 +16,7 @@ export default function FilesPage() {
 
   async function refresh() {
     try {
-      const res = isDemo ? await api.demoListFiles(guestId) : await api.listFiles(token);
+      const res = await api.listFiles(token);
       setProjects(res.projects);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Could not load files.');
@@ -35,9 +35,7 @@ export default function FilesPage() {
     setBusy(true);
     setError('');
     try {
-      const res = isDemo
-        ? await api.demoUploadFile(guestId, name, file)
-        : await api.uploadFile(token, name, file);
+      const res = await api.uploadFile(token, name, file);
       if (res.skipped_unsafe_entries?.length) {
         showToast(`Uploaded, but ${res.skipped_unsafe_entries.length} unsafe entr${res.skipped_unsafe_entries.length === 1 ? 'y was' : 'ies were'} skipped`, 'danger');
       } else {
@@ -63,8 +61,26 @@ export default function FilesPage() {
     }
   }
 
-  function downloadUrl(name) {
-    return isDemo ? api.demoDownloadFileUrl(guestId, name) : api.downloadFileUrl(name);
+  async function handleDownload(name) {
+    // A plain <a href> can't attach an Authorization header, and this endpoint
+    // is JWT-protected — so fetch it manually and trigger the save via a blob URL.
+    try {
+      const res = await fetch(`${BASE_URL}/files/download/${encodeURIComponent(name)}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error(`Download failed (${res.status})`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${name}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      showToast(err.message || 'Download failed', 'danger');
+    }
   }
 
   return (
@@ -113,10 +129,8 @@ export default function FilesPage() {
                   <div className="list-item-title">{name}</div>
                 </div>
                 <div style={{ display: 'flex', gap: 8 }}>
-                  <a className="btn btn-ghost" href={downloadUrl(name)}><Download size={15} /></a>
-                  {!isDemo && (
-                    <button className="btn btn-ghost" onClick={() => handleDelete(name)}><Trash2 size={15} /></button>
-                  )}
+                  <button className="btn btn-ghost" onClick={() => handleDownload(name)}><Download size={15} /></button>
+                  <button className="btn btn-ghost" onClick={() => handleDelete(name)}><Trash2 size={15} /></button>
                 </div>
               </div>
             ))}

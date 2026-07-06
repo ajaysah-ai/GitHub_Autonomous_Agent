@@ -4,7 +4,7 @@ import { useAuth } from '../context/Authcontext.jsx';
 import { api, ApiError } from '../api/client.js';
 
 export default function FeedbackModal({ threadId, onClose, onSubmitted }) {
-  const { token, isDemo, guestId } = useAuth();
+  const { token } = useAuth();
   const [rating, setRating] = useState('good');
   const [comment, setComment] = useState('');
   const [busy, setBusy] = useState(false);
@@ -15,7 +15,7 @@ export default function FeedbackModal({ threadId, onClose, onSubmitted }) {
     setBusy(true);
     setError('');
     try {
-      await api.submitFeedback(isDemo ? null : token, isDemo ? guestId : null, {
+      await api.submitFeedback(token, {
         thread_id: threadId,
         rating,
         comment: comment.trim() || undefined,

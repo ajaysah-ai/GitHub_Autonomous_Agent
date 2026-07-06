@@ -57,7 +57,7 @@ export default function LoginPage() {
           No account yet? <Link to="/signup"><button type="button">Sign up</button></Link>
         </div>
         <div className="auth-switch">
-          Just exploring? <Link to="/demo"><button type="button">Try the demo</button></Link>
+          <Link to="/about"><button type="button">About this agent</button></Link>
         </div>
       </div>
     </div>
