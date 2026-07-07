@@ -74,6 +74,9 @@ export default function SignupPage() {
         <div className="auth-switch">
           Already have an account? <Link to="/login"><button type="button">Log in</button></Link>
         </div>
+        <div className="auth-switch">
+          <Link to="/about"><button type="button">How to get GitHub Token & Groq API Key</button></Link>
+        </div>
       </div>
     </div>
   );
