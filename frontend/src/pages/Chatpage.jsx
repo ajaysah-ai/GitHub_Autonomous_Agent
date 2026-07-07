@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Send, CheckCircle2, XCircle, Ban } from 'lucide-react';
+import { Send, CheckCircle2, XCircle, Ban, AlertTriangle, RotateCcw } from 'lucide-react';
 import { useAuth } from '../context/Authcontext.jsx';
 import { useToast } from '../context/Toastcontext.jsx';
 import { api, ApiError } from '../api/client.js';
@@ -22,6 +22,7 @@ export default function ChatPage() {
   const [status, setStatus] = useState(routeThreadId === 'new' ? 'new' : 'loading');
   const [prompt, setPrompt] = useState(null);
   const [plan, setPlan] = useState(null);
+  const [crashReason, setCrashReason] = useState(null);
   const [goalDraft, setGoalDraft] = useState('');
   const [replyDraft, setReplyDraft] = useState('');
   const [busy, setBusy] = useState(false);
@@ -34,6 +35,7 @@ export default function ChatPage() {
     setStatus(result.status);
     setPrompt(result.prompt || null);
     setPlan(result.plan || null);
+    setCrashReason(result.crash_reason || null);
   }, []);
 
   // Fresh "seed" passed via navigation state (right after starting a goal).
@@ -51,7 +53,12 @@ export default function ChatPage() {
           const res = await api.getThread(token, routeThreadId);
           setThreadId(routeThreadId);
           setMessages(res.messages || []);
-          setStatus(res.awaiting_input ? 'awaiting_input' : res.completed ? 'completed' : 'ended');
+          setCrashReason(res.crash_reason || null);
+          if (res.needs_recovery) {
+            setStatus('awaiting_recovery');
+          } else {
+            setStatus(res.awaiting_input ? 'awaiting_input' : res.completed ? 'completed' : 'ended');
+          }
         } catch (err) {
           setError(err instanceof ApiError ? err.message : 'Could not load this task.');
         }
@@ -137,6 +144,21 @@ export default function ChatPage() {
         />
       )}
 
+      {status === 'awaiting_recovery' && (
+        <div className="clarify-card" style={{ borderColor: 'var(--danger)', background: 'var(--danger-soft)' }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 10 }}>
+            <AlertTriangle size={16} color="var(--danger)" style={{ flexShrink: 0, marginTop: 2 }} />
+            <span>{crashReason || prompt || 'A recoverable issue interrupted this task.'}</span>
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button className="btn btn-primary" onClick={() => handleReply('retry')} disabled={busy}>
+              {busy ? <span className="spinner" /> : <><RotateCcw size={15} /> Retry</>}
+            </button>
+            <button className="btn btn-danger" onClick={() => handleReply('cancel')} disabled={busy}>Cancel task</button>
+          </div>
+        </div>
+      )}
+
       {status === 'awaiting_input' && (
         <ReplyBox value={replyDraft} onChange={setReplyDraft} onSend={() => handleReply(replyDraft)} busy={busy} placeholder="Continue this task..." />
       )}
@@ -168,6 +190,7 @@ function StatusBadge({ status }) {
   const map = {
     awaiting_clarification: ['badge-pending', 'Needs details'],
     awaiting_approval: ['badge-pending', 'Awaiting approval'],
+    awaiting_recovery: ['badge-danger', 'Needs recovery'],
     awaiting_input: ['badge-pending', 'Awaiting your reply'],
     completed: ['badge-ok', 'Completed'],
     blocked: ['badge-danger', 'Blocked'],
@@ -176,7 +199,8 @@ function StatusBadge({ status }) {
     loading: ['badge-neutral', 'Loading...'],
   };
   const [cls, label] = map[status] || ['badge-neutral', status];
-  const Icon = status === 'completed' ? CheckCircle2 : status === 'blocked' ? XCircle : status === 'cancelled' ? Ban : null;
+  const Icon = status === 'completed' ? CheckCircle2 : status === 'blocked' ? XCircle : status === 'cancelled' ? Ban
+    : status === 'awaiting_recovery' ? AlertTriangle : null;
   return <span className={`badge ${cls}`}>{Icon && <Icon size={12} />} {label}</span>;
 }
 

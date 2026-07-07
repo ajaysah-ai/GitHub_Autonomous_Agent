@@ -1,6 +1,7 @@
+import React from 'react';
 import {
   Terminal, ShieldCheck, KeyRound, FolderLock, Split, Ban,
-  Link as LinkIcon, Mail, Sparkles, ListChecks,
+  Link as LinkIcon, Mail, Sparkles, ListChecks, HelpCircle, Eye
 } from 'lucide-react';
 
 // ---- Edit this with your own details ----
@@ -40,6 +41,62 @@ const SECURITY = [
   { icon: Ban, title: 'No silent actions', body: 'Nothing executes without your explicit one-time approval of the full plan. Decline, and nothing runs at all.' },
 ];
 
+// New Guides Data Structure with unique image placeholders per step
+const VISUAL_GUIDES = {
+  github: [
+    { text: 'Settings (your avatar) > Developer Settings', image: '/images/github_developer_settings.png' },
+    { text: 'Personal Access Tokens > Tokens (Classic)', image: '/images/github_access_token.png' },
+    { text: 'Generate new token', image: '/images/github_generate_new_token.png' },
+  ],
+  groq: [
+    { text: 'Go to this page', link: 'https://console.groq.com/keys', image: '/images/Groq_web_first_page.png' },
+    { text: 'Sign In (Google/Email)', image: '/images/Groq_google_signin.png' },
+    { text: "Click on '+ Create API Key'", image: '/images/Groq_generate_api_key.png' },
+  ],
+};
+
+function CredentialGuideWithVisuals({ platform }) {
+  const stepsData = VISUAL_GUIDES[platform];
+  const icon = platform === 'github' ? KeyRound : Eye;
+  const titleText = platform === 'github' ? 'GitHub Token Guide' : 'Groq API Guide';
+
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <icon size={16} color="var(--accent)" />
+        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', margin: 0 }}>{titleText}</h3>
+      </div>
+      <div className="list">
+        {stepsData.map((step, i) => (
+          <div key={i} className="card" style={{ display: 'flex', gap: 14, flexDirection: 'column' }}>
+            <div style={{ display: 'flex', gap: 14 }}>
+              <div style={{
+                fontFamily: 'var(--font-mono)', color: 'var(--accent)', fontWeight: 600,
+                flexShrink: 0, width: 24,
+              }}>{i + 1}</div>
+              <div style={{ color: 'var(--text-dim)', fontSize: '0.88rem', lineHeight: 1.55 }}>
+                {step.text}
+                {step.link && <a href={step.link} target="_blank" rel="noreferrer" className="nav-link" style={{ display: 'inline', marginLeft: 8 }}><LinkIcon size={12} /> Groq API Key URL</a>}
+              </div>
+            </div>
+            {/* Visual for this step */}
+            <div style={{
+              marginTop: 10, overflow: 'hidden', borderRadius: 8, border: '1px solid var(--border-color, #333)',
+              background: '#0a0a0a'
+            }}>
+              <img
+                src={step.image}
+                alt={`${titleText} Step ${i + 1}`}
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function AboutPage() {
   return (
     <div>
@@ -78,6 +135,14 @@ export default function AboutPage() {
           documentation — without writing the commands yourself. Every plan is machine-reviewed for
           correctness before you're asked to approve it, and nothing executes without that one explicit approval.
         </p>
+      </Section>
+
+      {/* Setup Guide - NEW SECTION */}
+      <Section icon={HelpCircle} title="How to get GitHub Personal Access Token & Groq API Key">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 20 }}>
+          <CredentialGuideWithVisuals platform="github" />
+          <CredentialGuideWithVisuals platform="groq" />
+        </div>
       </Section>
 
       {/* Tools */}

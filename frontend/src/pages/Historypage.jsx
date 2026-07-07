@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { History as HistoryIcon, CheckCircle2, Clock } from 'lucide-react';
+import { History as HistoryIcon, CheckCircle2, Clock, RotateCcw } from 'lucide-react';
 import { useAuth } from '../context/Authcontext.jsx';
 import { api, ApiError } from '../api/client.js';
 
@@ -46,12 +46,20 @@ export default function HistoryPage() {
             <div key={t.thread_id} className="list-item" onClick={() => navigate(`/chat/${t.thread_id}`)}>
               <div className="list-item-main">
                 <div className="list-item-title">{t.goal}</div>
-                <div className="list-item-sub">{t.last_message}</div>
+                <div className="list-item-sub">
+                  {t.needs_recovery ? (t.crash_reason || 'Paused due to a recoverable issue') : t.last_message}
+                </div>
               </div>
-              <span className={`badge ${t.completed ? 'badge-ok' : t.awaiting_input ? 'badge-pending' : 'badge-neutral'}`}>
-                {t.completed ? <CheckCircle2 size={12} /> : <Clock size={12} />}
-                {t.completed ? 'Done' : t.awaiting_input ? 'Waiting' : 'Ended'}
-              </span>
+              {t.needs_recovery ? (
+                <span className="badge badge-danger">
+                  <RotateCcw size={12} /> Resume
+                </span>
+              ) : (
+                <span className={`badge ${t.completed ? 'badge-ok' : t.awaiting_input ? 'badge-pending' : 'badge-neutral'}`}>
+                  {t.completed ? <CheckCircle2 size={12} /> : <Clock size={12} />}
+                  {t.completed ? 'Done' : t.awaiting_input ? 'Waiting' : 'Ended'}
+                </span>
+              )}
             </div>
           ))}
         </div>
