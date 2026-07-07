@@ -57,7 +57,7 @@ export default function LoginPage() {
           No account yet? <Link to="/signup"><button type="button">Sign up</button></Link>
         </div>
         <div className="auth-switch">
-          <Link to="/about"><button type="button">About this agent</button></Link>
+          <Link to="/about"><button type="button"><h4>About this GitHub Autonomous Agent</h4></button></Link>
         </div>
       </div>
     </div>
