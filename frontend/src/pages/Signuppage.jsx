@@ -75,7 +75,7 @@ export default function SignupPage() {
           Already have an account? <Link to="/login"><button type="button">Log in</button></Link>
         </div>
         <div className="auth-switch">
-          <Link to="/about"><button type="button">How to get GitHub Token & Groq API Key</button></Link>
+          <Link to="/about"><button type="button">How to get GitHub Personal Access Token & Groq API Key</button></Link>
         </div>
       </div>
     </div>
