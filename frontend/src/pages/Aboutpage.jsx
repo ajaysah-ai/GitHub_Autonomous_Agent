@@ -162,11 +162,6 @@ export default function AboutPage() {
             style={{ width: '100%', display: 'block' }}
           />
         </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 20 }}>
-          <CredentialGuideWithVisuals platform="github" />
-          <CredentialGuideWithVisuals platform="groq" />
-        </div>
       </Section>
 
       {/* Tools */}
