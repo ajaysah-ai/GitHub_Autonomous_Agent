@@ -145,6 +145,30 @@ export default function AboutPage() {
         </div>
       </Section>
 
+      {/* Setup Guide - NEW SECTION */}
+      <Section icon={HelpCircle} title="Tutorial Video">
+        {/* वीडियो प्लेयर */}
+        <div style={{
+          marginBottom: 24,
+          borderRadius: 12,
+          overflow: 'hidden',
+          border: '1px solid var(--border-color, #333)',
+          background: '#000'
+        }}>
+          <video 
+            src="/videos/guide.mp4" 
+            controls 
+            poster="/images/video_thumbnail.png" /* ऑप्शनल: वीडियो लोड होने से पहले दिखने वाली इमेज */
+            style={{ width: '100%', display: 'block' }}
+          />
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 20 }}>
+          <CredentialGuideWithVisuals platform="github" />
+          <CredentialGuideWithVisuals platform="groq" />
+        </div>
+      </Section>
+
       {/* Tools */}
       <Section icon={ListChecks} title="Available tools">
         <div className="list">
